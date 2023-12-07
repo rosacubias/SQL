@@ -1,0 +1,44 @@
+SELECT *
+FROM fortune_companies;
+
+#Which companies allow for 10 or more of paid time off day
+
+SELECT(paid_time_off_days), company_name
+FROM fortune_companies
+GROUP BY company_name
+HAVING(paid_time_off_days) >=10
+ORDER BY paid_time_off_days ASC;
+
+#Select all from fortune comapnies that provide healthcare benefits and the average employee tenure is less than 5
+
+SELECT *
+FROM fortune_companies
+WHERE healthcare_benefits=1
+  AND avg_employee_tenure<5;
+
+# What is the average revenue per industry that offers healthcare benefits, in descending order
+  
+SELECT ROUND(AVG(revenue),1) AS "average_revenue", industry
+FROM fortune_companies
+WHERE healthcare_benefits=1
+GROUP BY industry
+ORDER BY average_revenue DESC;
+
+# Select the minimum number of employees in an industry that offers more than 15 days of paid time off but offers no healthcare benefits
+
+SELECT MIN(employees) AS employees, industry
+FROM fortune_companies
+WHERE paid_time_off_days >15
+  AND healthcare_benefits=0
+GROUP BY industry;
+
+# Assign all the companies in Technology as "great", "acceptable", or "poor"
+
+SELECT company_name,
+CASE 
+  WHEN paid_time_off_days >20 THEN "great"
+  WHEN paid_time_off_days >10 THEN "acceptable"
+  ELSE "poor"
+END as PTO
+FROM fortune_companies
+WHERE industry= "Technology";
